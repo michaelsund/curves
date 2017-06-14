@@ -13,7 +13,6 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 //Added
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.github.reactNativeMPAndroidChart.MPAndroidChartPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
           new ReactNativeIcons(),
           //added
-          new VectorIconsPackage(),
-          new MPAndroidChartPackage()
+          new VectorIconsPackage()
       );
     }
   };

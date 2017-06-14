@@ -5,10 +5,13 @@ import {
   View,
   Button,
   Navigator,
-  AsyncStorage
+  AsyncStorage,
+  TextInput
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ActionButton from 'react-native-action-button';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 import version from '../../package.json';
 
 const styles = StyleSheet.create({
@@ -23,57 +26,54 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Settings extends Component {
+const mapStateToProps = (state) => {
+  const mappedProps = {
+    settings: state.settings
+  };
+  return mappedProps;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  const dispatchedProps = {
+    onSetSettings: (settings, storageSave) => dispatch(
+      actions.setSettings(settings, storageSave)
+    )
+  };
+  return dispatchedProps;
+};
+
+class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalStorage: 0
+      weightGoal: null,
+      armsGoal: null
     };
   }
 
   componentDidMount = () => {
-    AsyncStorage.getItem('@CurvesStore:weight').then((data) => {
+    AsyncStorage.getItem('@CurvesStore:settings').then((data) => {
       if (data) {
-        this.setState({ totalStorage: this.state.totalStorage + data.length });
+        this.props.onSetSettings(JSON.parse(data), false);
       }
     })
     .done();
-    AsyncStorage.getItem('@CurvesStore:arms').then((data) => {
-      if (data) {
-        this.setState({ totalStorage: this.state.totalStorage + data.length });
-      }
-    })
-    .done();
-    AsyncStorage.getItem('@CurvesStore:waist').then((data) => {
-      if (data) {
-        this.setState({ totalStorage: this.state.totalStorage + data.length });
-      }
-    })
-    .done();
-    AsyncStorage.getItem('@CurvesStore:gut').then((data) => {
-      if (data) {
-        this.setState({ totalStorage: this.state.totalStorage + data.length });
-      }
-    })
-    .done();
-    AsyncStorage.getItem('@CurvesStore:hips').then((data) => {
-      if (data) {
-        this.setState({ totalStorage: this.state.totalStorage + data.length });
-      }
-    })
-    .done();
-    AsyncStorage.getItem('@CurvesStore:buttocks').then((data) => {
-      if (data) {
-        this.setState({ totalStorage: this.state.totalStorage + data.length });
-      }
-    })
-    .done();
-    AsyncStorage.getItem('@CurvesStore:thighs').then((data) => {
-      if (data) {
-        this.setState({ totalStorage: this.state.totalStorage + data.length });
-      }
-    })
-    .done();
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      weightGoal: JSON.stringify(nextProps.settings.weightGoal),
+      armsGoal: JSON.stringify(nextProps.settings.armsGoal),
+    });
+  }
+
+  saveSettings = () => {
+    this.props.onSetSettings({
+      weightGoal: parseFloat(this.state.weightGoal),
+      armsGoal: parseFloat(this.state.armsGoal)
+    },
+    true);
+    // Popup to confirm save
   }
 
   render() {
@@ -89,8 +89,24 @@ export default class Settings extends Component {
           onIconClicked={() => this.props.drawer.openDrawer()}
         />
         <View style={{ padding: 5 }}>
-          <Text style={styles.allText}>Version {version.version}</Text>
-          <Text style={styles.allText}>Total localstorage size: {this.state.totalStorage} Kb</Text>
+          <Text>WeightGoal</Text>
+          <TextInput
+            multiline={false}
+            onChangeText={weightGoal => this.setState({ weightGoal })}
+            keyboardType="numeric"
+            placeholder={this.state.weightGoal}
+          />
+          <Text>ArmsGoal</Text>
+          <TextInput
+            multiline={false}
+            onChangeText={armsGoal => this.setState({ armsGoal })}
+            keyboardType="numeric"
+            placeholder={this.state.armsGoal}
+          />
+          <Button
+            onPress={() => { this.saveSettings(); }}
+            title="Save"
+          />
         </View>
       </View>
     );
@@ -98,5 +114,9 @@ export default class Settings extends Component {
 }
 
 Settings.propTypes = {
-  drawer: React.PropTypes.object
+  drawer: React.PropTypes.object.isRequired,
+  onSetSettings: React.PropTypes.func.isRequired,
+  settings: React.PropTypes.object.isRequired
 };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

@@ -110,6 +110,7 @@ export default class InfoBox extends Component {
     const bars = data.map((value, index) => {
       const chart = (
         <Chart
+          goal={this.props.goal}
           key={index}
           value={value}
           high={this.state.high}
@@ -160,7 +161,7 @@ export default class InfoBox extends Component {
           }}
         >
           <View style={{ backgroundColor: `rgba(${this.props.color.slice(4, -1)}, 0.2)`, flexDirection: 'row' }}>
-            <Text style={styles.title}>{this.props.title}</Text>
+            <Text style={styles.title}>{this.props.goal} {this.props.title}</Text>
             <Text style={styles.title}>{this.state.diff}</Text>
             { this.state.diff > 0 ? (
               <Icon
@@ -200,5 +201,6 @@ InfoBox.propTypes = {
   data: React.PropTypes.array,
   title: React.PropTypes.string.isRequired,
   unit: React.PropTypes.string.isRequired,
-  color: React.PropTypes.string.isRequired
+  color: React.PropTypes.string.isRequired,
+  goal: React.PropTypes.number
 };

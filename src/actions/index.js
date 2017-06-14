@@ -22,6 +22,16 @@ export const SET_THIGHS = 'SET_THIGHS';
 export const SET_HIPS = 'SET_HIPS';
 export const SET_BUTTOCKS = 'SET_BUTTOCKS';
 
+export const SET_SETTINGS = 'SET_SETTINGS';
+
+export function setSettings(settings, storageSave) {
+  return {
+    type: SET_SETTINGS,
+    settings,
+    storageSave
+  };
+}
+
 export function newWeight(weightMeasurement) {
   return {
     type: NEW_WEIGHT,

@@ -31,8 +31,9 @@ export default class Chart extends Component {
 
   render() {
     const { color, low, high, value, date, unitHeight, barInterval } = this.props;
-    const entity = (value / high) * 100;
+    const entity = ((value / high) * 100);
     const empty = 100 - entity;
+
 
     const baseStyle = {
       backgroundColor: color,
