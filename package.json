@@ -19,7 +19,6 @@
     "react-native-fbsdk": "^0.4.0",
     "react-native-icons": "^0.7.1",
     "react-native-lazyload": "^1.1.0",
-    "react-native-mp-android-chart": "^0.2.0",
     "react-native-vector-icons": "^3.0.0",
     "react-redux": "^4.4.6",
     "redux": "^3.6.0",

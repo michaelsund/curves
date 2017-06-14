@@ -7,12 +7,11 @@ import {
   ScrollView
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import RNChart from 'react-native-chart';
+import Chart from './chart';
 
 const styles = StyleSheet.create({
   barRow: {
-    flex: 1,
-    marginTop: 5
+    height: 100,
   },
   selected: {
     flex: 1,
@@ -41,19 +40,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 18,
     textAlign: 'center'
-  },
-  chart: {
-    width: 340,
-    height: 100
   }
 });
-
-const chartData = [
-  ['17/6/1', 75],
-  ['17/6/1', 74],
-  ['17/6/1', 73],
-  ['17/6/1', 72],
-];
 
 export default class InfoBox extends Component {
   constructor(props) {
@@ -62,18 +50,16 @@ export default class InfoBox extends Component {
       selected: 0,
       date: '',
       high: 0,
-      diff: 0,
-      data: []
+      diff: 0
     };
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
+    const max = this.findBiggest(this.props.data);
+    this.setState({ high: max });
     if (this.props.data.length > 0) {
-      const dataArray = [];
-      for (const d of this.props.data) {
-        dataArray.push([d.date, d.value]);
-      }
-      this.setState({ data: dataArray });
+      const last = this.props.data[this.props.data.length - 1];
+      this.setState({ selected: last.value, date: last.date });
     }
 
     // Calculate diff for icon to show
@@ -85,6 +71,20 @@ export default class InfoBox extends Component {
         ).toFixed(1)
       });
     }
+  }
+
+  childUpdatesParent = (value, date) => {
+    this.setState({ selected: value, date });
+  }
+
+  findBiggest = (obj) => {
+    let bigSeen = 0;
+    for (const o of obj) {
+      if (o.value > bigSeen) {
+        bigSeen = o.value;
+      }
+    }
+    return bigSeen;
   }
 
   randomEmpty = () => {
@@ -106,16 +106,53 @@ export default class InfoBox extends Component {
     });
   }
 
+  renderBars = (data, date, color) => {
+    const bars = data.map((value, index) => {
+      const chart = (
+        <Chart
+          goal={this.props.goal}
+          key={index}
+          value={value}
+          high={this.state.high}
+          low={0}
+          color={color}
+          unitHeight={1}
+          date={date[index]}
+          barInterval={1}
+          childUpdatesParent={this.childUpdatesParent}
+        />
+      );
+      return chart;
+    });
+    return bars;
+  }
+
   render() {
     const scrollHeight = 10;
     return (
       <View>
         <View style={styles.barRow}>
-          {this.props.data.length > 0 ? (
-            null
-          ) : (
-            <Text style={styles.empty}>{this.randomEmpty()}</Text>
-          )}
+          {/* TODO use Flatlist with scrollToEnd */}
+          <ScrollView
+            ref={(ref) => { this.SCROLLVIEW = ref; }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            alwaysBounceVertical={false}
+            directionalLockEnabled
+            style={[styles.scrollView, { height: scrollHeight }]}
+          >
+            {this.renderBars(
+              this.props.data.map(d => d.value),
+              this.props.data.map(d => d.date),
+              this.props.color
+            )}
+            {this.props.data.length > 0 ? (
+              null
+            ) : (
+              <Text style={styles.empty}>{this.randomEmpty()}</Text>
+            )}
+          </ScrollView>
         </View>
         <TouchableHighlight
           underlayColor={'#FFFFFF'}

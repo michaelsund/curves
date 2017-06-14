@@ -116,7 +116,7 @@ class Splash extends Component {
     .done();
     setTimeout(() => {
       this.props.navigator.resetTo({ name: 'Home' });
-    }, 1500);
+    }, 1000);
   }
 
   render() {

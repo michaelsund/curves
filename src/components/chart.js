@@ -6,6 +6,7 @@ import {
   Text,
   Dimensions
 } from 'react-native';
+import RNChart from 'react-native-chart';
 
 const barWidth = 30;
 
@@ -16,52 +17,28 @@ const styles = StyleSheet.create({
   barWrapper: {
     position: 'relative'
   },
-  bar: {
-    width: barWidth
-  },
-  empty: {
-    opacity: 0.2
+  chart: {
+    width: 200,
+    height: 100
   }
 });
 
+const data = [
+    [0, 1],
+    [1, 3],
+    [3, 7],
+    [4, 9],
+];
+
 export default class Chart extends Component {
-  onPress(value, date) {
-    this.props.childUpdatesParent(value, date);
-  }
-
   render() {
-    const { color, low, high, value, date, unitHeight, barInterval } = this.props;
-    const entity = ((value / high) * 100);
-    const empty = 100 - entity;
-
-
-    const baseStyle = {
-      backgroundColor: color,
-      marginRight: barInterval
-    };
     return (
-      <TouchableHighlight
-        onPress={() => { this.onPress(value, this.props.date); }}
-        underlayColor="transparent"
-      >
-        <View style={styles.container}>
-          <View style={styles.barWrapper}>
-            <View
-              style={[
-                styles.bar,
-                styles.empty,
-                Object.assign({}, baseStyle, { height: (empty * unitHeight) })
-              ]}
-            />
-            <View
-              style={[
-                styles.bar,
-                Object.assign({}, baseStyle, { height: (entity * unitHeight) })
-              ]}
-            />
-          </View>
-        </View>
-      </TouchableHighlight>
+      <RNChart
+        style={styles.chart}
+        data={data}
+        verticalGridStep={5}
+        type="line"
+      />
     );
   }
 }

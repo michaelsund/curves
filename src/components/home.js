@@ -6,7 +6,8 @@ import {
   Button,
   Navigator,
   ScrollView,
-  AsyncStorage
+  AsyncStorage,
+  RefreshControl
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ActionButton from 'react-native-action-button';
@@ -49,11 +50,29 @@ const styles = StyleSheet.create({
 });
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false
+    };
+  }
+
   componentDidMount = () => {
     AsyncStorage.getItem('@CurvesStore:settings').then((data) => {
       if (data) {
         this.props.onSetSettings(JSON.parse(data), false);
       }
+    })
+    .done();
+  }
+
+  refreshing() {
+    this.setState({ refreshing: true });
+    AsyncStorage.getItem('@CurvesStore:settings').then((data) => {
+      if (data) {
+        this.props.onSetSettings(JSON.parse(data), false);
+      }
+      this.setState({ refreshing: false });
     })
     .done();
   }
@@ -70,7 +89,14 @@ class Home extends Component {
           titleColor="white"
           onIconClicked={() => this.props.drawer.openDrawer()}
         />
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={() => { this.refreshing(); }}
+            />
+          }
+        >
           <InfoBox
             navigator={this.props.navigator}
             goal={this.props.settings.weightGoal}
