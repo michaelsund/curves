@@ -7,12 +7,11 @@ import {
   ScrollView
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import RNChart from 'react-native-chart';
+import Chart from './chart';
 
 const styles = StyleSheet.create({
   barRow: {
-    flex: 1,
-    marginTop: 5
+    flex: 1
   },
   selected: {
     flex: 1,
@@ -41,19 +40,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 18,
     textAlign: 'center'
-  },
-  chart: {
-    width: 340,
-    height: 100
   }
 });
-
-const chartData = [
-  ['17/6/1', 75],
-  ['17/6/1', 74],
-  ['17/6/1', 73],
-  ['17/6/1', 72],
-];
 
 export default class InfoBox extends Component {
   constructor(props) {
@@ -68,14 +56,6 @@ export default class InfoBox extends Component {
   }
 
   componentWillMount = () => {
-    if (this.props.data.length > 0) {
-      const dataArray = [];
-      for (const d of this.props.data) {
-        dataArray.push([d.date, d.value]);
-      }
-      this.setState({ data: dataArray });
-    }
-
     // Calculate diff for icon to show
     const arrLength = this.props.data.length;
     if (arrLength >= 2) {
@@ -112,7 +92,7 @@ export default class InfoBox extends Component {
       <View>
         <View style={styles.barRow}>
           {this.props.data.length > 0 ? (
-            null
+            <Chart data={this.props.data} color={this.props.color} title={this.props.title} />
           ) : (
             <Text style={styles.empty}>{this.randomEmpty()}</Text>
           )}

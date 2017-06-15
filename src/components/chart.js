@@ -2,54 +2,57 @@ import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
-  TouchableHighlight,
-  Text,
-  Dimensions
+  ScrollView
 } from 'react-native';
-import RNChart from 'react-native-chart';
-
-const barWidth = 30;
+import {
+  VictoryArea,
+  VictoryAxis,
+  VictoryChart,
+  VictoryTheme,
+  VictoryLine
+} from 'victory-native';
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative'
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 5,
+    paddingRight: 5
   },
   barWrapper: {
     position: 'relative'
-  },
-  chart: {
-    width: 200,
-    height: 100
   }
 });
 
-const data = [
-    [0, 1],
-    [1, 3],
-    [3, 7],
-    [4, 9],
-];
-
 export default class Chart extends Component {
   render() {
+    const color = this.props.color;
     return (
-      <RNChart
-        style={styles.chart}
-        data={data}
-        verticalGridStep={5}
-        type="line"
-      />
+      <ScrollView contentContainerStyle={styles.container} scrollEnabled>
+        <VictoryChart
+          padding={{ top: 10, bottom: 30, left: 30, right: 30 }}
+          height={150}
+          theme={VictoryTheme.material}
+        >
+          <VictoryLine
+            interpolation="radial"
+            style={{
+              data: {
+                stroke: color,
+                strokeWidth: 2
+              }
+            }}
+            data={this.props.data}
+            x="date"
+            y="value"
+          />
+        </VictoryChart>
+      </ScrollView>
     );
   }
 }
 
 Chart.propTypes = {
-  value: React.PropTypes.number,
-  high: React.PropTypes.number,
-  low: React.PropTypes.number,
-  color: React.PropTypes.string,
-  unitHeight: React.PropTypes.number,
-  date: React.PropTypes.string,
-  barInterval: React.PropTypes.number,
-  childUpdatesParent: React.PropTypes.func
+  data: React.PropTypes.array,
+  color: React.PropTypes.string
 };
