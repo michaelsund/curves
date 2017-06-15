@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   TextInput
 } from 'react-native';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ActionButton from 'react-native-action-button';
 import { connect } from 'react-redux';
@@ -102,6 +103,7 @@ class Add extends Component {
         // Closed datepicker
       } else {
         const newDate = new Date(year, month, day).toLocaleDateString();
+        console.log(`date is: ${newDate}`);
         this.setState({ date: newDate });
       }
     } catch ({ code, message }) {
@@ -186,15 +188,15 @@ class Add extends Component {
 }
 
 Add.propTypes = {
-  navigator: React.PropTypes.object,
-  drawer: React.PropTypes.object,
-  onNewWeight: React.PropTypes.func,
-  onNewArms: React.PropTypes.func,
-  onNewGut: React.PropTypes.func,
-  onNewWaist: React.PropTypes.func,
-  onNewThighs: React.PropTypes.func,
-  onNewHips: React.PropTypes.func,
-  onNewButtocks: React.PropTypes.func,
+  navigator: PropTypes.object,
+  drawer: PropTypes.object,
+  onNewWeight: PropTypes.func,
+  onNewArms: PropTypes.func,
+  onNewGut: PropTypes.func,
+  onNewWaist: PropTypes.func,
+  onNewThighs: PropTypes.func,
+  onNewHips: PropTypes.func,
+  onNewButtocks: PropTypes.func,
 };
 
 export default connect(null, mapDispatchToProps)(Add);

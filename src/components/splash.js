@@ -8,6 +8,7 @@ import {
   BackAndroid,
   Image
 } from 'react-native';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import version from '../../package.json';
@@ -134,14 +135,14 @@ class Splash extends Component {
 }
 
 Splash.propTypes = {
-  navigator: React.PropTypes.object,
-  onSetWeight: React.PropTypes.func,
-  onSetArms: React.PropTypes.func,
-  onSetGut: React.PropTypes.func,
-  onSetWaist: React.PropTypes.func,
-  onSetThighs: React.PropTypes.func,
-  onSetHips: React.PropTypes.func,
-  onSetButtocks: React.PropTypes.func
+  navigator: PropTypes.object,
+  onSetWeight: PropTypes.func,
+  onSetArms: PropTypes.func,
+  onSetGut: PropTypes.func,
+  onSetWaist: PropTypes.func,
+  onSetThighs: PropTypes.func,
+  onSetHips: PropTypes.func,
+  onSetButtocks: PropTypes.func
 };
 
 export default connect(null, mapDispatchToProps)(Splash);

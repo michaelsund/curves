@@ -9,6 +9,7 @@ import {
   AsyncStorage,
   RefreshControl
 } from 'react-native';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ActionButton from 'react-native-action-button';
 import { connect } from 'react-redux';
@@ -24,19 +25,9 @@ const mapStateToProps = (state) => {
     waist: state.waist,
     thighs: state.thighs,
     hips: state.hips,
-    buttocks: state.buttocks,
-    settings: state.settings
+    buttocks: state.buttocks
   };
   return mappedProps;
-};
-
-const mapDispatchToProps = (dispatch) => {
-  const dispatchedProps = {
-    onSetSettings: (settings, storageSave) => dispatch(
-      actions.setSettings(settings, storageSave)
-    )
-  };
-  return dispatchedProps;
 };
 
 const styles = StyleSheet.create({
@@ -57,25 +48,20 @@ class Home extends Component {
     };
   }
 
-  componentDidMount = () => {
-    AsyncStorage.getItem('@CurvesStore:settings').then((data) => {
-      if (data) {
-        this.props.onSetSettings(JSON.parse(data), false);
-      }
-    })
-    .done();
+  componenWillReceiveProps = () => {
+    console.log(`CURRENT WEIGHT PROPS: ${JSON.stringify(this.props.weight)}`);
   }
 
-  refreshing() {
-    this.setState({ refreshing: true });
-    AsyncStorage.getItem('@CurvesStore:settings').then((data) => {
-      if (data) {
-        this.props.onSetSettings(JSON.parse(data), false);
-      }
-      this.setState({ refreshing: false });
-    })
-    .done();
-  }
+  // refreshing() {
+  //   this.setState({ refreshing: true });
+  //   AsyncStorage.getItem('@CurvesStore:settings').then((data) => {
+  //     if (data) {
+  //       this.props.onSetSettings(JSON.parse(data), false);
+  //     }
+  //     this.setState({ refreshing: false });
+  //   })
+  //   .done();
+  // }
 
   render() {
     return (
@@ -99,7 +85,6 @@ class Home extends Component {
         >
           <InfoBox
             navigator={this.props.navigator}
-            goal={this.props.settings.weightGoal}
             data={this.props.weight}
             title="Weight"
             unit="kg"
@@ -107,7 +92,6 @@ class Home extends Component {
           />
           <InfoBox
             navigator={this.props.navigator}
-            goal={this.props.settings.armsGoal}
             data={this.props.arms}
             title="Arms"
             unit="cm"
@@ -115,7 +99,6 @@ class Home extends Component {
           />
           <InfoBox
             navigator={this.props.navigator}
-            goal={this.props.settings.gutGoal}
             data={this.props.gut}
             title="Gut"
             unit="cm"
@@ -123,7 +106,6 @@ class Home extends Component {
           />
           <InfoBox
             navigator={this.props.navigator}
-            goal={this.props.settings.waistGoal}
             data={this.props.waist}
             title="Waist"
             unit="cm"
@@ -131,7 +113,6 @@ class Home extends Component {
           />
           <InfoBox
             navigator={this.props.navigator}
-            goal={this.props.settings.hipGoal}
             data={this.props.hips}
             title="Hips"
             unit="cm"
@@ -139,7 +120,6 @@ class Home extends Component {
           />
           <InfoBox
             navigator={this.props.navigator}
-            goal={this.props.settings.buttocksGoal}
             data={this.props.buttocks}
             title="Buttocks"
             unit="cm"
@@ -147,7 +127,6 @@ class Home extends Component {
           />
           <InfoBox
             navigator={this.props.navigator}
-            goal={this.props.settings.thighsGoal}
             data={this.props.thighs}
             title="Thighs"
             unit="cm"
@@ -160,17 +139,15 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  drawer: React.PropTypes.object,
-  navigator: React.PropTypes.object,
-  weight: React.PropTypes.array.isRequired,
-  arms: React.PropTypes.array.isRequired,
-  gut: React.PropTypes.array.isRequired,
-  waist: React.PropTypes.array.isRequired,
-  thighs: React.PropTypes.array.isRequired,
-  hips: React.PropTypes.array.isRequired,
-  buttocks: React.PropTypes.array.isRequired,
-  onSetSettings: React.PropTypes.func,
-  settings: React.PropTypes.object
+  drawer: PropTypes.object,
+  navigator: PropTypes.object,
+  weight: PropTypes.array.isRequired,
+  arms: PropTypes.array.isRequired,
+  gut: PropTypes.array.isRequired,
+  waist: PropTypes.array.isRequired,
+  thighs: PropTypes.array.isRequired,
+  hips: PropTypes.array.isRequired,
+  buttocks: PropTypes.array.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, null)(Home);

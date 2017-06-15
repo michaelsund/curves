@@ -5,12 +5,14 @@ import {
   ScrollView
 } from 'react-native';
 import {
-  VictoryArea,
   VictoryAxis,
   VictoryChart,
-  VictoryTheme,
-  VictoryLine
+  VictoryLine,
+  VictoryGroup,
+  VictoryTooltip,
+  VictoryScatter
 } from 'victory-native';
+import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,35 +26,62 @@ const styles = StyleSheet.create({
   }
 });
 
+let last = 0;
+
 export default class Chart extends Component {
+  moreOrLess = (val) => {
+    const res = val.value > last ? 'triangleUp' : 'triangleDown';
+    last = val.value;
+    return res;
+  }
+
   render() {
     const color = this.props.color;
+    const dates = this.props.data.map((d) => {
+      const x = d.date.slice(0, -3);
+      return x;
+    });
     return (
       <ScrollView contentContainerStyle={styles.container} scrollEnabled>
-        <VictoryChart
-          padding={{ top: 10, bottom: 30, left: 30, right: 30 }}
+        <VictoryGroup
+          padding={{ top: 40, bottom: 30, left: 25, right: 25 }}
+          data={this.props.data}
+          x="date"
+          y="value"
           height={150}
-          theme={VictoryTheme.material}
         >
           <VictoryLine
-            interpolation="radial"
+            interpolation="cardinal"
             style={{
               data: {
                 stroke: color,
-                strokeWidth: 2
+                strokeWidth: 3,
+                opacity: 0.4
               }
             }}
-            data={this.props.data}
-            x="date"
-            y="value"
           />
-        </VictoryChart>
+          <VictoryScatter
+            symbol={val => this.moreOrLess(val)}
+            labels={val => val.value}
+            style={{
+              data: {
+                fontSize: 14,
+                fill: color
+              }
+            }}
+            size={6}
+          />
+          <VictoryAxis
+            tickValues={dates}
+            fixLabelOverlap
+          />
+        </VictoryGroup>
       </ScrollView>
     );
   }
 }
 
 Chart.propTypes = {
-  data: React.PropTypes.array,
-  color: React.PropTypes.string
+  data: PropTypes.array,
+  color: PropTypes.string
 };

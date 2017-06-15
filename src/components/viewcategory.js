@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
   ListView
 } from 'react-native';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ActionButton from 'react-native-action-button';
 import { connect } from 'react-redux';
@@ -161,17 +162,17 @@ class ViewCategory extends Component {
 }
 
 ViewCategory.propTypes = {
-  drawer: React.PropTypes.object,
-  title: React.PropTypes.string.isRequired,
-  unit: React.PropTypes.string.isRequired,
-  data: React.PropTypes.array.isRequired,
-  onDelWeight: React.PropTypes.func,
-  onDelArms: React.PropTypes.func,
-  onDelGut: React.PropTypes.func,
-  onDelWaist: React.PropTypes.func,
-  onDelHips: React.PropTypes.func,
-  onDelButtocks: React.PropTypes.func,
-  onDelThighs: React.PropTypes.func,
+  drawer: PropTypes.object,
+  title: PropTypes.string.isRequired,
+  unit: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
+  onDelWeight: PropTypes.func,
+  onDelArms: PropTypes.func,
+  onDelGut: PropTypes.func,
+  onDelWaist: PropTypes.func,
+  onDelHips: PropTypes.func,
+  onDelButtocks: PropTypes.func,
+  onDelThighs: PropTypes.func,
 };
 
 export default connect(null, mapDispatchToProps)(ViewCategory);

@@ -6,6 +6,7 @@ import {
   Text,
   ScrollView
 } from 'react-native';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Chart from './chart';
 
@@ -56,6 +57,15 @@ export default class InfoBox extends Component {
   }
 
   componentWillMount = () => {
+    // Set local state data to recieved data
+    this.setState({ data: this.props.data });
+
+    // Find latest value entered
+    if (this.props.data.length > 0) {
+      const last = this.props.data[this.props.data.length - 1];
+      this.setState({ selected: last.value, date: last.date });
+    }
+
     // Calculate diff for icon to show
     const arrLength = this.props.data.length;
     if (arrLength >= 2) {
@@ -67,18 +77,6 @@ export default class InfoBox extends Component {
     }
   }
 
-  randomEmpty = () => {
-    const quotes = [
-      'Such empty',
-      'Nothing, nada, zip',
-      'Anyone here?',
-      'More data!',
-      'Gimmie something'
-    ];
-    const picked = Math.round(Math.random() * (quotes.length - 1));
-    return quotes[picked];
-  }
-
   gotoViewCategory = (data, title, unit) => {
     this.props.navigator.push({
       name: 'ViewCategory',
@@ -87,14 +85,19 @@ export default class InfoBox extends Component {
   }
 
   render() {
-    const scrollHeight = 10;
+    if (this.state.data.length > 5) {
+      this.state.data = this.props.data.slice(Math.max(this.props.data.length - 5, 1));
+    }
     return (
       <View>
         <View style={styles.barRow}>
           {this.props.data.length > 0 ? (
-            <Chart data={this.props.data} color={this.props.color} title={this.props.title} />
+            <Chart
+              data={this.state.data}
+              color={this.props.color}
+            />
           ) : (
-            <Text style={styles.empty}>{this.randomEmpty()}</Text>
+            null
           )}
         </View>
         <TouchableHighlight
@@ -140,10 +143,10 @@ export default class InfoBox extends Component {
 }
 
 InfoBox.propTypes = {
-  navigator: React.PropTypes.object,
-  data: React.PropTypes.array,
-  title: React.PropTypes.string.isRequired,
-  unit: React.PropTypes.string.isRequired,
-  color: React.PropTypes.string.isRequired,
-  goal: React.PropTypes.number
+  navigator: PropTypes.object,
+  data: PropTypes.array,
+  title: PropTypes.string.isRequired,
+  unit: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+  goal: PropTypes.number
 };

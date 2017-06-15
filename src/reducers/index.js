@@ -6,7 +6,6 @@ import waist from './waist';
 import thighs from './thighs';
 import hips from './hips';
 import buttocks from './buttocks';
-import settings from './settings';
 
 export default combineReducers({
   weight,
@@ -15,6 +14,5 @@ export default combineReducers({
   waist,
   thighs,
   hips,
-  buttocks,
-  settings
+  buttocks
 });
