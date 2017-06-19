@@ -17,7 +17,7 @@ import Home from './src/components/home';
 import Add from './src/components/add';
 import ViewCategory from './src/components/viewcategory';
 import Splash from './src/components/splash';
-import Settings from './src/components/settings';
+import Info from './src/components/info';
 import configureStore from './src/store/configureStore';
 
 const store = configureStore();
@@ -111,15 +111,15 @@ export default class Curves extends Component {
           <TouchableHighlight
             underlayColor={'#FFFFFF'}
             style={styles.menuButton}
-            onPress={() => { this.menuNavigation({ name: 'Settings' }, this.NAV); }}
+            onPress={() => { this.menuNavigation({ name: 'Info' }, this.NAV); }}
           >
             <View style={styles.innerMenuButton}>
               <Icon
                 style={styles.menuIcons}
-                name="settings"
+                name="perm-device-information"
               />
               <Text style={styles.menuButtonTxt}>
-                Settings
+                Info
               </Text>
             </View>
           </TouchableHighlight>
@@ -139,9 +139,9 @@ export default class Curves extends Component {
           <ViewCategory navigator={navigator} {...route.passProps} drawer={this.DRAWER} />
         );
         break;
-      case 'Settings':
+      case 'Info':
         rendering = (
-          <Settings navigator={navigator} {...route.passProps} drawer={this.DRAWER} />
+          <Info navigator={navigator} {...route.passProps} drawer={this.DRAWER} />
         );
         break;
       case 'Add':
